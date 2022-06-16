@@ -3,7 +3,7 @@ const { generateJWTToken } = require('../utils/generateTokenJWT');
 
 const authentication = async ({ email, password }) => {
     if (!email || !password) {
-        return { statusCode: 401, message: 'Campos faltantes.' };
+        return { statusCode: 400, message: 'Some required fields are missing' };
     }
 
     const user = await User.findOne({
@@ -12,7 +12,7 @@ const authentication = async ({ email, password }) => {
     });
 
     if (!user) {
-        return { statusCode: 401, message: 'Usuário ou senha inválido' };
+        return { statusCode: 400, message: 'Invalid fields' };
     }
 
     const token = generateJWTToken(user.dataValues);

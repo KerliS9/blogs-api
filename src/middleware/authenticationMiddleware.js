@@ -1,4 +1,4 @@
-const { authenticateToken } = require("../utils/JWTToken");
+const { authenticateToken } = require('../utils/generateTokenJWT');
 
 const authenticationMiddleware = async (req, res, next) => {
     const token = req.headers.authorization;
