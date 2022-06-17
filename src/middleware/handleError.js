@@ -1,10 +1,9 @@
-module.exports = (err, _req, res, next) => {
-  if (err.isJoi) {
-    return res.status(400).json({ message: err.details[0].message });
-  }
+const statusCode = require('../utils/httpStatus');
+
+module.exports = (err, _req, res, _next) => {
+  console.log('errorHandler', err);
   if (err.status) {
-    return res.status(300).json({ message: err.message });
+    return res.status(err.status).json({ message: err.message });
   }
-  res.status(500).json({ message: 'Internal Server Error' });
-  next();
+  res.status(statusCode.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
 };
