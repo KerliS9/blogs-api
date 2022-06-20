@@ -2,14 +2,12 @@ const { Category } = require('../database/models');
 // const statusCode = require('../utils/httpStatus');
 // const { generateJWTToken } = require('../utils/generateTokenJWT');
 
-/* const getAllUsers = async () => {
-    const users = await Category.findAll({
-      attributes: { exclude: ['password'] },
-    });
-    return users;
+const getAllCategories = async () => {
+    const categories = await Category.findAll();
+    return categories;
   };
 
-const getUserById = async ({ id }) => {
+/* const getUserById = async ({ id }) => {
   const user = await Category.findOne({
     attributes: { exclude: ['password'] },
     where: { id },
@@ -19,7 +17,6 @@ const getUserById = async ({ id }) => {
 }; */
 
 const createCategory = async (body) => {
-  // console.log('params', body);
   const { name } = body;
   const category = await Category.findOne({ where: { name } });
   if (category) return { message: 'Category already registered' };
@@ -28,7 +25,7 @@ const createCategory = async (body) => {
 };
 
 module.exports = {
-  // getAllUsers,
+  getAllCategories,
   // getUserById,
   createCategory,  
 };

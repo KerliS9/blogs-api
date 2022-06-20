@@ -16,21 +16,20 @@ const categoryService = require('../services/categoryService');
   } catch (e) {
     next(e);
   }
-});
+}); */
 
-userRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
+categoryRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
-    const users = await userService.getAllUsers();
-    return res.status(statusCode.OK).json(users);
+    const categories = await categoryService.getAllCategories();
+    return res.status(statusCode.OK).json(categories);
   } catch (e) {
     next(e);
   }
-}); */
+}); 
 
 categoryRouter.post('/', authenticationMiddleware, newCategory, async (req, res, next) => {
   try {
     const category = await categoryService.createCategory(req.body);
-    // console.log('create controllers', category);
     if (category.message) {
       return res.status(statusCode.CONFLICT).json(category);
     }
