@@ -7,8 +7,8 @@ const routers = require('./router');
 const app = express();
 
 app.use(express.json());
-app.use(errorHandler);
 app.use(routers);
+app.use(errorHandler);
 
 // ...
 
