@@ -2,7 +2,7 @@ const express = require('express');
 const statusCode = require('../utils/httpStatus');
 
 const authRouter = express.Router();
-const authService = require('../services/authenticationService');
+const authService = require('../services/authService');
 
 authRouter.post('/', async (req, res, _next) => {
   // try {

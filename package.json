@@ -28,6 +28,7 @@
     "test": "npx -y wait-on -t 300000 http://localhost:3030 && NODE_ENV=test jest -i --verbose --forceExit",
     "posttest": "npm run kill:test",
     "test-coverage": "jest -i --verbose --forceExit --coverage",
+    "dev": "nodemon server.js",
     "debug": "nodemon .",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
   },
