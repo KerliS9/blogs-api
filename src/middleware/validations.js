@@ -1,12 +1,6 @@
 const Joi = require('joi');
 const statusCode = require('../utils/httpStatus');
 
-/* const checkTypeDetails = ({ details }) => {
-  const { type } = details[0];
-  if (type === 'any.required') return 400;
-  return 422;
-}; */
-
 const newUserValidation = (req, _res, next) => {
   // console.log('middleware', req.body);
   const user = Joi.object({
@@ -31,4 +25,21 @@ const newUserValidation = (req, _res, next) => {
   next();
 };
 
-module.exports = { newUserValidation };
+const newCategory = (req, _res, next) => {
+  const category = Joi.object({
+    name: Joi.string().required(),
+  });
+
+  const { error } = category.validate(req.body);
+  // console.log('error', error.details);
+
+  if (error) {
+    return next({
+      statusCode: statusCode.BAD_REQUEST,
+      message: error.details[0].message,
+    });
+  }
+  next();
+};
+
+module.exports = { newUserValidation, newCategory };
