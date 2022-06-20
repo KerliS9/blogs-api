@@ -3,7 +3,7 @@ const statusCode = require('../utils/httpStatus');
 
 const authenticationMiddleware = async (req, res, next) => {
     const token = req.headers.authorization;
-    console.log('authenticationMiddleware', token);
+    // console.log('authenticationMiddleware', token);
     
     /* if (!token) {
         return { statusCode: statusCode.UNAUTHORIZED, message: 'Token not found' };
@@ -11,9 +11,9 @@ const authenticationMiddleware = async (req, res, next) => {
     
     try {
         const payload = await authenticateToken(token);
-        console.log('payload', payload);
+        // console.log('payload', payload);
         // res.locals.payload = payload;
-        if (payload.message) {
+        if (!payload) {
             return next({ statusCode: statusCode.UNAUTHORIZED, message: 'Token not found' });
         }
         next();

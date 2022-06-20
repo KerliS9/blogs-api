@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const statusCode = require('./httpStatus');
+// const statusCode = require('./httpStatus');
 
 const SECRET = process.env.JWT_SECRET; // suaSenhaSecreta
 
@@ -13,13 +13,13 @@ const generateJWTToken = (payload) =>
     jwt.sign(payload, SECRET, jwtConfig);
 
 const authenticateToken = async (token) => {
-    console.log('authenticateToken params', token);
+    // console.log('authenticateToken params', token);
     if (!token) {
-        return { statusCode: statusCode.UNAUTHORIZED, message: 'Token not found' };
+        return false;
     }
 
     const introspection = jwt.verify(token, SECRET, jwtConfig);
-    console.log('introspection', introspection);
+    // console.log('introspection', introspection);
     return introspection;
 };
 

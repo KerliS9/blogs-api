@@ -6,9 +6,12 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const userRouter = express.Router();
 const userService = require('../services/userService');
 
-userRouter.get('/:id', async (req, res, next) => {
+userRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
   try {
     const user = await userService.getUserById(req.params);
+    if (user.message) {
+      return res.status(statusCode.NOT_FOUND).json(user);
+    }
     return res.status(statusCode.OK).json(user);
   } catch (e) {
     next(e);
