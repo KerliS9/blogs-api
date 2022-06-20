@@ -1,10 +1,9 @@
 const { User } = require('../database/models');
-const statusCode = require('../utils/httpStatus');
 const { generateJWTToken } = require('../utils/generateTokenJWT');
 
 const authentication = async ({ email, password }) => {
     if (!email || !password) {
-        return { status: statusCode.BAD_REQUEST, message: 'Some required fields are missing' };
+        return { message: 'Some required fields are missing' };
     }
 
     const user = await User.findOne({
@@ -13,10 +12,11 @@ const authentication = async ({ email, password }) => {
     });
 
     if (!user) {
-        return { status: statusCode.BAD_REQUEST, message: 'Invalid fields' };
+        return { message: 'Invalid fields' };
     }
 
     const token = generateJWTToken(user.dataValues);
+    // console.log('auth service', user);
     return { token };
 };
 

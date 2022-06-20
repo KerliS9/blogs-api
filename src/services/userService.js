@@ -7,8 +7,9 @@ const getAllUsers = async () => {
   };
 
 const getUserById = async ({ id }) => {
-  const users = await User.findOne({ where: { id } });
-  return users;
+  const user = await User.findOne({ where: { id } });
+  if (!user) return { message: 'User does not exist' };
+  return user;
 };
 
 module.exports = {
