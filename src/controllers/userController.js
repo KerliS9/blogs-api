@@ -1,6 +1,7 @@
 const express = require('express');
 const statusCode = require('../utils/httpStatus');
 const { newUserValidation } = require('../middleware/validations');
+const { authenticationMiddleware } = require('../middleware/authMiddleware');
 
 const userRouter = express.Router();
 const userService = require('../services/userService');
@@ -14,7 +15,7 @@ userRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-userRouter.get('/', async (_req, res, next) => {
+userRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
     const users = await userService.getAllUsers();
     return res.status(statusCode.OK).json(users);

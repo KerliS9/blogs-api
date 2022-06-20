@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const statusCode = require('./httpStatus');
 
-const SECRET = process.env.JWT_SECRET;
+const SECRET = process.env.JWT_SECRET; // suaSenhaSecreta
 
 const jwtConfig = {
     expiresIn: '15m',
@@ -12,17 +13,14 @@ const generateJWTToken = (payload) =>
     jwt.sign(payload, SECRET, jwtConfig);
 
 const authenticateToken = async (token) => {
+    console.log('authenticateToken params', token);
     if (!token) {
-        return { statusCode: 401, message: 'Sem Token' };
+        return { statusCode: statusCode.UNAUTHORIZED, message: 'Token not found' };
     }
 
-    try {
-        const introspection = await jwt.verify(token, SECRET, jwtConfig);
-        return introspection;
-    } catch (e) {
-        console.log('generateTokenJWT', e.message);
-        return { statusCode: 401, message: 'token inválido' };
-    }
+    const introspection = jwt.verify(token, SECRET, jwtConfig);
+    console.log('introspection', introspection);
+    return introspection;
 };
 
 module.exports = {

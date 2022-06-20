@@ -23,7 +23,7 @@ const newUserValidation = (req, _res, next) => {
   // console.log('error', error.details);
 
   if (error) {
-    next({
+    return next({
       statusCode: statusCode.BAD_REQUEST,
       message: error.details[0].message,
     });
