@@ -1,11 +1,11 @@
-const { Category } = require('../database/models');
+const { Category, BlogPost } = require('../database/models');
 
-const getAllCategories = async () => {
+/* const getAllCategories = async () => {
     const categories = await Category.findAll();
     return categories;
   };
-
-const createCategory = async (body) => {
+ */
+const createPost = async (body) => {
   const { name } = body;
   const category = await Category.findOne({ where: { name } });
   if (category) return { message: 'Category already registered' };
@@ -14,6 +14,6 @@ const createCategory = async (body) => {
 };
 
 module.exports = {
-  getAllCategories,
-  createCategory,  
+  // getAllCategories,
+  createPost,  
 };

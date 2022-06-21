@@ -6,18 +6,6 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const categoryRouter = express.Router();
 const categoryService = require('../services/categoryService');
 
-/* userRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
-  try {
-    const user = await userService.getUserById(req.params);
-    if (user.message) {
-      return res.status(statusCode.NOT_FOUND).json(user);
-    }
-    return res.status(statusCode.OK).json(user);
-  } catch (e) {
-    next(e);
-  }
-}); */
-
 categoryRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
     const categories = await categoryService.getAllCategories();
