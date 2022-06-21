@@ -42,4 +42,25 @@ const newCategory = (req, _res, next) => {
   next();
 };
 
-module.exports = { newUserValidation, newCategory };
+const newPost = (req, _res, next) => {
+  const post = Joi.object({
+    title: Joi.string().required(),
+    content: Joi.string().required(),
+    categoryIds: Joi.array().items().required(),
+  }).messages({
+    'any.required': 'Some required fields are missing',
+  });
+
+  const { error } = post.validate(req.body);
+  // console.log('error', error.details);
+
+  if (error) {
+    return next({
+      statusCode: statusCode.BAD_REQUEST,
+      message: error.details[0].message,
+    });
+  }
+  next();
+};
+
+module.exports = { newUserValidation, newCategory, newPost };
