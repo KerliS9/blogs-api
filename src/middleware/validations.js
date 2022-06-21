@@ -52,12 +52,12 @@ const newPost = (req, _res, next) => {
   });
 
   const { error } = post.validate(req.body);
-  // console.log('error', error.details);
+  // console.log('error', error.message);
 
   if (error) {
     return next({
       statusCode: statusCode.BAD_REQUEST,
-      message: error.details[0].message,
+      message: error.message,
     });
   }
   next();

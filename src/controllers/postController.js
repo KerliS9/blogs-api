@@ -18,8 +18,9 @@ postRouter.get('/', /* authenticationMiddleware, */ async (_req, res, next) => {
 postRouter.post('/', authenticationMiddleware, newPost, async (req, res, next) => {
   try {
     const post = await postService.createPost(req.body);
+    console.log('controllers', post);
     if (post.message) {
-      return res.status(statusCode.NOT_FOUND).json(post);
+      return res.status(statusCode.BAD_REQUEST).json(post);
     }
     return res.status(statusCode.CREATED).json(post);
   } catch (e) {
