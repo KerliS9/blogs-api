@@ -6,7 +6,8 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const postRouter = express.Router();
 const postService = require('../services/postService');
 
-postRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
+postRouter.use(authenticationMiddleware);
+postRouter.get('/:id', async (req, res, next) => {
   try {
     const post = await postService.getPostById(req.params);
     if (post.message) {
@@ -17,7 +18,7 @@ postRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
     next(e);
   }
 }); 
-postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
+postRouter.get('/', async (_req, res, next) => {
   try {
     const posts = await postService.getAllPost();
     return res.status(statusCode.OK).json(posts);
@@ -26,8 +27,7 @@ postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   }
 }); 
 
-postRouter.post('/', authenticationMiddleware, newPost, 
-async (req, res, next) => {
+postRouter.post('/', newPost, async (req, res, next) => {
   try {
     const post = await postService.createPost(req.body, req.headers);
     if (post.message) {
@@ -39,7 +39,7 @@ async (req, res, next) => {
   }
 });
 
-postRouter.put('/:id', authenticationMiddleware, updatePost, async (req, res, next) => {
+postRouter.put('/:id', updatePost, async (req, res, next) => {
   try {
     const post = await postService.updatePostById(req.params, req.headers, req.body);
     if (post.message) {

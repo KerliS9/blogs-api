@@ -6,7 +6,8 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const categoryRouter = express.Router();
 const categoryService = require('../services/categoryService');
 
-categoryRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
+categoryRouter.use(authenticationMiddleware);
+categoryRouter.get('/', async (_req, res, next) => {
   try {
     const categories = await categoryService.getAllCategories();
     return res.status(statusCode.OK).json(categories);
@@ -15,7 +16,7 @@ categoryRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   }
 }); 
 
-categoryRouter.post('/', authenticationMiddleware, newCategory, async (req, res, next) => {
+categoryRouter.post('/', newCategory, async (req, res, next) => {
   try {
     const category = await categoryService.createCategory(req.body);
     if (category.message) {

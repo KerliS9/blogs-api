@@ -6,7 +6,21 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const userRouter = express.Router();
 const userService = require('../services/userService');
 
-userRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
+userRouter.post('/', newUserValidation, async (req, res, next) => {
+  try {
+    const user = await userService.createUser(req.body);
+    // console.log('create controllers', user);
+    if (user.message) {
+      return res.status(statusCode.CONFLICT).json(user);
+    }
+    return res.status(statusCode.CREATED).json(user);
+  } catch (e) {
+    next(e);
+  }
+});
+
+userRouter.use(authenticationMiddleware);
+userRouter.get('/:id', async (req, res, next) => {
   try {
     const user = await userService.getUserById(req.params);
     if (user.message) {
@@ -18,23 +32,10 @@ userRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
   }
 });
 
-userRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
+userRouter.get('/', async (_req, res, next) => {
   try {
     const users = await userService.getAllUsers();
     return res.status(statusCode.OK).json(users);
-  } catch (e) {
-    next(e);
-  }
-});
-
-userRouter.post('/', newUserValidation, async (req, res, next) => {
-  try {
-    const user = await userService.createUser(req.body);
-    // console.log('create controllers', user);
-    if (user.message) {
-      return res.status(statusCode.CONFLICT).json(user);
-    }
-    return res.status(statusCode.CREATED).json(user);
   } catch (e) {
     next(e);
   }
