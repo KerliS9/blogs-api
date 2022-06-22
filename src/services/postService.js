@@ -72,10 +72,24 @@ const deletePostById = async (params, headers) => {
   BlogPost.destroy({ where: { id } });
 };
 
+const getPostByContent = async (params) => {
+  console.log('service', params);
+  /* const blogPost = await BlogPost.findByPk(id);
+  if (!blogPost) return { message: 'Post does not exist' };
+  return BlogPost.findOne({
+    where: { id },
+    include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+    ],
+}); */
+};
+
 module.exports = {
   getAllPost,
   getPostById,
   createPost,
   updatePostById,
   deletePostById,
+  getPostByContent,
 };

@@ -6,7 +6,21 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const postRouter = express.Router();
 const postService = require('../services/postService');
 
-postRouter.use(authenticationMiddleware);
+// postRouter.use(authenticationMiddleware);
+
+postRouter.get('/search?q=', async (req, res, next) => {
+  console.log('conectaria', req.query);
+  try {
+    const post = await postService.getPostByContent(req.params);
+    if (post.message) {
+      return res.status(statusCode.NOT_FOUND).json(post);
+    }
+    return res.status(statusCode.OK).json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
 postRouter.get('/:id', async (req, res, next) => {
   try {
     const post = await postService.getPostById(req.params);
@@ -17,7 +31,8 @@ postRouter.get('/:id', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
-}); 
+});
+
 postRouter.get('/', async (_req, res, next) => {
   try {
     const posts = await postService.getAllPost();

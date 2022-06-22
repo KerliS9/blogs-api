@@ -31,7 +31,7 @@ userRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-userRouter.delete('/', async (_req, res, next) => {
+userRouter.get('/', async (_req, res, next) => {
   try {
     const users = await userService.getAllUsers();
     return res.status(statusCode.OK).json(users);
@@ -39,6 +39,7 @@ userRouter.delete('/', async (_req, res, next) => {
     next(e);
   }
 });
+
 userRouter.delete('/me', async (req, res, next) => {
   try {
     await userService.getMyUser(req.headers);
