@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+
+const { Op } = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
 const getAllPost = async () => {
@@ -72,17 +74,22 @@ const deletePostById = async (params, headers) => {
   BlogPost.destroy({ where: { id } });
 };
 
-const getPostByContent = async (params) => {
-  console.log('service', params);
-  /* const blogPost = await BlogPost.findByPk(id);
-  if (!blogPost) return { message: 'Post does not exist' };
-  return BlogPost.findOne({
-    where: { id },
-    include: [
-        { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
-    ],
-}); */
+const getPostByContent = async (params, query) => {
+  const { q } = query;
+  console.log('params', q);
+  const posts = await BlogPost.findAll({ where: { title: { [Op.substring]: q } } });
+    console.log('findAll', posts);
+  /* const posts = await BlogPost.findAll({ where: { [Op.or]: [
+    { title: { [Op.like]: q },
+    // { content: { [Op.substring]: q }
+  }],
+  include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+  ],
+} }); */
+  /* if (!posts) return { message: 'Post does not exist' };
+ */
 };
 
 module.exports = {
