@@ -9,7 +9,6 @@ const userService = require('../services/userService');
 userRouter.post('/', newUserValidation, async (req, res, next) => {
   try {
     const user = await userService.createUser(req.body);
-    // console.log('create controllers', user);
     if (user.message) {
       return res.status(statusCode.CONFLICT).json(user);
     }

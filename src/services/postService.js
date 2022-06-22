@@ -23,14 +23,11 @@ const getAllPost = async () => {
   });
   };
 
-const categoryExist = (categories) => {
-  const cat = Promise.all(categories.map(async (id) => {
+const categoryExist = (categories) => Promise.all(categories.map(async (id) => {
     const category = await Category.findByPk(id);
     if (!category) return false;
     return true;
   }));
-  return cat;
-};
 
 const createPost = async (body, headers) => {
   const { title, content, categoryIds } = body;
