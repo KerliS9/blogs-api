@@ -1,21 +1,20 @@
 const jwt = require('jsonwebtoken');
-const { BlogPost, PostCategory, Category } = require('../database/models');
+const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
-const getAllPost = async (headers) => {
-  const user = jwt.decode(headers.authorization);
-  console.log('getAllPost', user);
-    const posts = await BlogPost.findAll(/* {
+const getAllPost = async () => {
+    const posts = await BlogPost.findAll({
       include: [
-          { model: User, as: 'user', attributes: { exclude: ['iat', 'exp'] } },
-          { model: Category, as: 'categories' },
+          { model: User, as: 'user', attributes: { exclude: ['password'] } },
+          { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
       ],
-  } */);
+  });
+  console.log('service', posts);
     return posts;
   };
 
 const categoryExist = (categories) => {
   const cat = Promise.all(categories.map(async (id) => {
-    const category = await Category.findOne({ where: { id } });
+    const category = await Category.findByPk(id);
     if (!category) return false;
     return true;
   }));
@@ -41,22 +40,3 @@ module.exports = {
   getAllPost,
   createPost,  
 };
-/* const addPost = await Promise.all(categoryIds.map(async (cat) => {
-  // const user = await User.findByPk(cat);
-  // const user = await BlogPost.findByPk(cat);
-  // console.log('prom', user);
-  // const userId = user.dataValues.id;
-  const newPost = await BlogPost.create({ title, content, userId });
-  return newPost;
-}));
-return addPost; */
-
-/* const user = await User.findByPk(categoryIds[0]);
-console.log('service user', user);
-const userId = user.dataValues.id;
-const newPost = await BlogPost.create({ title, content, userId });
-console.log('newPost criado', newPost);
-const { id } = newPost.dataValues;
-console.log('id', id);
-const posts = await BlogPost.findOne({ where: { id } });
-return posts; */

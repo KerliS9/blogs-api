@@ -6,9 +6,9 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const postRouter = express.Router();
 const postService = require('../services/postService');
 
-postRouter.get('/', /* authenticationMiddleware, */ async (req, res, next) => {
+postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
-    const posts = await postService.getAllPost(req.headers);
+    const posts = await postService.getAllPost();
     // console.log('controllers', posts);
     return res.status(statusCode.OK).json(posts);
   } catch (e) {

@@ -11,15 +11,15 @@ module.exports = (sequelize, DataTypes) => {
   PostCategory.associate = (models) => {
     models.BlogPost.belongsToMany(models.Category, {
         through: PostCategory,
-        foreignKey: 'postId',
-        otherKey: 'id',
+        foreignKey: 'postId', // primaryKey da PostCategory que também é primaryKey na BlogPost
+        otherKey: 'categoryId', // vem da migrations, onde define que conectaria entre as categorias e o PostCategory
         as: 'categories'
     });
 
     models.Category.belongsToMany(models.BlogPost, {
         through: PostCategory,
-        foreignKey: "categoryId", // foreignKey da tabela PostCategory que é a primaryKey da Category
-        otherKey: "id", // primaryKey da tabela BlogPost
+        foreignKey: "categoryId", // primaryKey da PostCategory que também é primaryKey na Category
+        otherKey: "postId", // vem da migrations, onde define que conectaria entre as BlogPost e o PostCategory
         as: 'blogPosts'
     });
   }
