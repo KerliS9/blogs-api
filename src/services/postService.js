@@ -48,9 +48,7 @@ const updatePostById = async (params, headers, body) => {
   const { id } = params;
   const { title, content } = body;
   const { id: userId } = jwt.decode(headers.authorization);
-  console.log('user', userId);
   const { dataValues } = await BlogPost.findByPk(id);
-  console.log('post do user', dataValues.userId);
   if (dataValues.userId !== userId) return { message: 'Unauthorized user' };
   await BlogPost.update({ title, content }, { where: { id } });
   // return getPostById(id);
@@ -63,9 +61,21 @@ const updatePostById = async (params, headers, body) => {
 });
 };
 
+const deletePostById = async (params, headers) => {
+  const { id } = params;
+  const { id: userId } = jwt.decode(headers.authorization);
+  const post = await BlogPost.findByPk(id);
+  console.log('service', post);
+  if (!post) return { message: 'Post does not exist' };
+  if (post.dataValues.userId !== userId) return { message: 'Unauthorized user' };
+  // return getPostById(id);
+  BlogPost.destroy({ where: { id } });
+};
+
 module.exports = {
   getAllPost,
   getPostById,
   createPost,
   updatePostById,
+  deletePostById,
 };

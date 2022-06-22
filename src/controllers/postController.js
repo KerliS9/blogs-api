@@ -51,4 +51,20 @@ postRouter.put('/:id', updatePost, async (req, res, next) => {
   }
 });
 
+postRouter.delete('/:id', async (req, res, next) => {
+  try {
+    const post = await postService.deletePostById(req.params, req.headers);
+    console.log('conectaria', post);
+    if (post === undefined) {
+      return res.status(statusCode.NO_CONTENT).send();
+    }
+    if (post.message === 'Unauthorized user') {
+      return res.status(statusCode.UNAUTHORIZED).json(post);
+    } 
+    return res.status(statusCode.NOT_FOUND).json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = postRouter;
