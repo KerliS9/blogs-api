@@ -15,10 +15,11 @@ postRouter.get('/', /* authenticationMiddleware, */ async (_req, res, next) => {
   }
 }); 
 
-postRouter.post('/', authenticationMiddleware, newPost, async (req, res, next) => {
+postRouter.post('/', /* authenticationMiddleware, */ newPost, async (req, res, next) => {
+  // console.log('controllers', req.headers);
   try {
-    const post = await postService.createPost(req.body);
-    console.log('controllers', post);
+    const post = await postService.createPost(req.body, req.headers);
+    // console.log('controllers', post);
     if (post.message) {
       return res.status(statusCode.BAD_REQUEST).json(post);
     }

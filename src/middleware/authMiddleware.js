@@ -1,7 +1,7 @@
 const { authenticateToken } = require('../utils/generateTokenJWT');
 const statusCode = require('../utils/httpStatus');
 
-const authenticationMiddleware = async (req, res, next) => {
+const authenticationMiddleware = async (req, _res, next) => {
     const token = req.headers.authorization;
     // console.log('authenticationMiddleware', token);
     
