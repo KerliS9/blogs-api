@@ -46,13 +46,16 @@ const newPost = (req, _res, next) => {
   const post = Joi.object({
     title: Joi.string().required(),
     content: Joi.string().required(),
-    categoryIds: Joi.array().items().required(),
+    categoryIds: Joi.array().items().min(1).required(),
   }).messages({
     'any.required': 'Some required fields are missing',
+    'string.empty': 'Some required fields are missing',
+    'array.base': 'Some required fields are missing',
+    'array.min': 'Some required fields are missing',
   });
 
   const { error } = post.validate(req.body);
-  // console.log('error', error.message);
+  // console.log('error', error); // string.empty
 
   if (error) {
     return next({

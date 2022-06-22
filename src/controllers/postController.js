@@ -1,7 +1,7 @@
 const express = require('express');
 const statusCode = require('../utils/httpStatus');
 const { newPost } = require('../middleware/validations');
-// const { authenticationMiddleware } = require('../middleware/authMiddleware');
+const { authenticationMiddleware } = require('../middleware/authMiddleware');
 
 const postRouter = express.Router();
 const postService = require('../services/postService');
@@ -16,7 +16,7 @@ postRouter.get('/', /* authenticationMiddleware, */ async (req, res, next) => {
   }
 }); 
 
-postRouter.post('/', /* authenticationMiddleware, */ newPost, async (req, res, next) => {
+postRouter.post('/', authenticationMiddleware, newPost, async (req, res, next) => {
   // console.log('controllers', req.headers);
   try {
     const post = await postService.createPost(req.body, req.headers);

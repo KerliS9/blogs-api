@@ -1,44 +1,39 @@
 const jwt = require('jsonwebtoken');
 const { BlogPost, PostCategory, Category } = require('../database/models');
-// const user = require('../database/models/user');
 
 const getAllPost = async (headers) => {
+  const user = jwt.decode(headers.authorization);
+  console.log('getAllPost', user);
     const posts = await BlogPost.findAll(/* {
       include: [
-          { model: User, as: 'user' },
+          { model: User, as: 'user', attributes: { exclude: ['iat', 'exp'] } },
           { model: Category, as: 'categories' },
       ],
   } */);
-    const user = jwt.decode(headers.authorization);
-    // console.log('getAllPost', user);
-    return { posts, user };
+    return posts;
   };
+
+const categoryExist = (categories) => {
+  const cat = Promise.all(categories.map(async (id) => {
+    const category = await Category.findOne({ where: { id } });
+    if (!category) return false;
+    return true;
+  }));
+  return cat;
+};
 
 const createPost = async (body, headers) => {
   const { title, content, categoryIds } = body;
-  // console.log('service body', headers);
   const { id: userId } = jwt.decode(headers.authorization);
-  // console.log('payload', userId);
-  const categoryExist = await Promise.all(categoryIds.map(async (cat) => {
-    await Category.findByPk(cat);
-    // console.log('dentro do promise', tes);
-    // return tes;
-  }));
-  // console.log('service category', categoryExist.find((cat) => cat === null));
-  if ((categoryExist.find((cat) => cat === null)) === null) {
+  const checkCategory = await categoryExist(categoryIds);
+  if (checkCategory.includes(false)) {
     return { message: '"categoryIds" not found' };
   }
-  // console.log('categoryExist', categoryExist);
-  // return categoryExist;
-
   const newPost = await BlogPost.create({ title, content, userId });
   const postId = newPost.dataValues.id;
-  const newPostCategory = await Promise.all(categoryIds.map(async (categoryId) => {
-    console.log('inserir na PostCategory', { postId, categoryId });
+  await Promise.all(categoryIds.map(async (categoryId) => {
     await PostCategory.create({ postId, categoryId });
-    // return tes;
   }));
-  console.log('newPostCategory', newPostCategory);
   return newPost;
 };
 
