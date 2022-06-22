@@ -1,14 +1,15 @@
 const express = require('express');
 const statusCode = require('../utils/httpStatus');
 const { newPost } = require('../middleware/validations');
-const { authenticationMiddleware } = require('../middleware/authMiddleware');
+// const { authenticationMiddleware } = require('../middleware/authMiddleware');
 
 const postRouter = express.Router();
 const postService = require('../services/postService');
 
-postRouter.get('/', /* authenticationMiddleware, */ async (_req, res, next) => {
+postRouter.get('/', /* authenticationMiddleware, */ async (req, res, next) => {
   try {
-    const posts = await postService.getAllPost();
+    const posts = await postService.getAllPost(req.headers);
+    // console.log('controllers', posts);
     return res.status(statusCode.OK).json(posts);
   } catch (e) {
     next(e);

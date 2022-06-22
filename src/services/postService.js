@@ -2,9 +2,16 @@ const jwt = require('jsonwebtoken');
 const { BlogPost, PostCategory, Category } = require('../database/models');
 // const user = require('../database/models/user');
 
-const getAllPost = async () => {
-    const posts = await BlogPost.findAll();
-    return posts;
+const getAllPost = async (headers) => {
+    const posts = await BlogPost.findAll(/* {
+      include: [
+          { model: User, as: 'user' },
+          { model: Category, as: 'categories' },
+      ],
+  } */);
+    const user = jwt.decode(headers.authorization);
+    // console.log('getAllPost', user);
+    return { posts, user };
   };
 
 const createPost = async (body, headers) => {
