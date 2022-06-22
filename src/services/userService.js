@@ -1,5 +1,5 @@
+const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
-// const statusCode = require('../utils/httpStatus');
 const { generateJWTToken } = require('../utils/generateTokenJWT');
 
 const getAllUsers = async () => {
@@ -19,18 +19,22 @@ const getUserById = async ({ id }) => {
 };
 
 const createUser = async (body) => {
-  // console.log('params', body);
   const { displayName, email, password, image } = body;
   const user = await User.findOne({ where: { email } });
   if (user) return { message: 'User already registered' };
   const newUser = await User.create({ displayName, email, password, image });
-  // console.log('service create', newUser);
   const token = generateJWTToken(newUser.dataValues);
   return { token };
+};
+
+const getMyUser = async (headers) => {
+  const { id } = jwt.decode(headers.authorization);
+  User.destroy({ where: { id } });
 };
 
 module.exports = {
   getAllUsers,
   getUserById,
-  createUser,  
+  createUser,
+  getMyUser, 
 };
