@@ -1,6 +1,6 @@
 const express = require('express');
 const statusCode = require('../utils/httpStatus');
-const { newPost } = require('../middleware/validations');
+const { newPost, updatePost } = require('../middleware/validations');
 const { authenticationMiddleware } = require('../middleware/authMiddleware');
 
 const postRouter = express.Router();
@@ -26,13 +26,26 @@ postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   }
 }); 
 
-postRouter.post('/', authenticationMiddleware, newPost, async (req, res, next) => {
+postRouter.post('/', authenticationMiddleware, newPost, 
+async (req, res, next) => {
   try {
     const post = await postService.createPost(req.body, req.headers);
     if (post.message) {
       return res.status(statusCode.BAD_REQUEST).json(post);
     }
     return res.status(statusCode.CREATED).json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
+postRouter.put('/:id', authenticationMiddleware, updatePost, async (req, res, next) => {
+  try {
+    const post = await postService.updatePostById(req.params, req.headers, req.body);
+    if (post.message) {
+      return res.status(statusCode.UNAUTHORIZED).json(post);
+    }
+    return res.status(statusCode.OK).json(post);
   } catch (e) {
     next(e);
   }

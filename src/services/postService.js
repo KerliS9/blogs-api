@@ -47,8 +47,28 @@ const createPost = async (body, headers) => {
   return newPost;
 };
 
+const updatePostById = async (params, headers, body) => {
+  const { id } = params;
+  const { title, content } = body;
+  const { id: userId } = jwt.decode(headers.authorization);
+  console.log('user', userId);
+  const { dataValues } = await BlogPost.findByPk(id);
+  console.log('post do user', dataValues.userId);
+  if (dataValues.userId !== userId) return { message: 'Unauthorized user' };
+  await BlogPost.update({ title, content }, { where: { id } });
+  // return getPostById(id);
+  return BlogPost.findOne({
+    where: { id },
+    include: [
+        { model: User, as: 'user', attributes: { exclude: ['password'] } },
+        { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+    ],
+});
+};
+
 module.exports = {
   getAllPost,
   getPostById,
-  createPost,  
+  createPost,
+  updatePostById,
 };
