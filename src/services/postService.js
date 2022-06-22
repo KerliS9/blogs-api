@@ -12,6 +12,22 @@ const getAllPost = async () => {
     return posts;
   };
 
+  const getPostById = async ({ id }) => {
+    console.log('getPostById', id);
+    const blogPost = await BlogPost.findByPk(id);
+    if (!blogPost) return { message: 'Post does not exist' };
+    console.log('getPostById', blogPost);
+    const posts = await BlogPost.findOne({
+      where: { id },
+      include: [
+          { model: User, as: 'user', attributes: { exclude: ['password'] } },
+          { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+      ],
+  });
+  // console.log('service', posts);
+    return posts;
+  };
+
 const categoryExist = (categories) => {
   const cat = Promise.all(categories.map(async (id) => {
     const category = await Category.findByPk(id);
@@ -38,5 +54,6 @@ const createPost = async (body, headers) => {
 
 module.exports = {
   getAllPost,
+  getPostById,
   createPost,  
 };

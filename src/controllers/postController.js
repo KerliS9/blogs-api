@@ -6,6 +6,19 @@ const { authenticationMiddleware } = require('../middleware/authMiddleware');
 const postRouter = express.Router();
 const postService = require('../services/postService');
 
+postRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
+  console.log('controllers', req.params);
+  try {
+    const post = await postService.getPostById(req.params);
+    if (post.message) {
+      return res.status(statusCode.NOT_FOUND).json(post);
+    }
+    // console.log('controllers', post);
+    return res.status(statusCode.OK).json(post);
+  } catch (e) {
+    next(e);
+  }
+}); 
 postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
     const posts = await postService.getAllPost();
