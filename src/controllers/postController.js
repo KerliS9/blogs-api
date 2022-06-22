@@ -7,13 +7,11 @@ const postRouter = express.Router();
 const postService = require('../services/postService');
 
 postRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
-  console.log('controllers', req.params);
   try {
     const post = await postService.getPostById(req.params);
     if (post.message) {
       return res.status(statusCode.NOT_FOUND).json(post);
     }
-    // console.log('controllers', post);
     return res.status(statusCode.OK).json(post);
   } catch (e) {
     next(e);
@@ -22,7 +20,6 @@ postRouter.get('/:id', authenticationMiddleware, async (req, res, next) => {
 postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
   try {
     const posts = await postService.getAllPost();
-    // console.log('controllers', posts);
     return res.status(statusCode.OK).json(posts);
   } catch (e) {
     next(e);
@@ -30,10 +27,8 @@ postRouter.get('/', authenticationMiddleware, async (_req, res, next) => {
 }); 
 
 postRouter.post('/', authenticationMiddleware, newPost, async (req, res, next) => {
-  // console.log('controllers', req.headers);
   try {
     const post = await postService.createPost(req.body, req.headers);
-    // console.log('controllers', post);
     if (post.message) {
       return res.status(statusCode.BAD_REQUEST).json(post);
     }
