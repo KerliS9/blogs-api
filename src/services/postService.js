@@ -9,12 +9,9 @@ const getAllPost = async () => BlogPost.findAll({
           { model: Category, as: 'categories', through: { attributes: [] } },
       ],
   });
-    // return posts;
-  // };
 
   const getPostById = async (id) => {
     const blogPost = await BlogPost.findByPk(id);
-    // console.log('generateTokenJWT', id);
     if (!blogPost) return { message: 'Post does not exist' };
     return BlogPost.findOne({
       where: { id },
