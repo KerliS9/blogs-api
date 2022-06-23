@@ -1,16 +1,11 @@
 const { Category } = require('../database/models');
 
-const getAllCategories = async () => {
-    const categories = await Category.findAll();
-    return categories;
-  };
+const getAllCategories = async () => Category.findAll();
 
-const createCategory = async (body) => {
-  const { name } = body;
+const createCategory = async ({ name }) => {
   const category = await Category.findOne({ where: { name } });
   if (category) return { message: 'Category already registered' };
-  const newCategory = await Category.create({ name });
-  return newCategory;
+  return Category.create({ name });
 };
 
 module.exports = {

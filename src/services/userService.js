@@ -2,12 +2,9 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../database/models');
 const { generateJWTToken } = require('../utils/generateTokenJWT');
 
-const getAllUsers = async () => {
-    const users = await User.findAll({
+const getAllUsers = async () => User.findAll({
       attributes: { exclude: ['password'] },
     });
-    return users;
-  };
 
 const getUserById = async ({ id }) => {
   const user = await User.findOne({
@@ -18,8 +15,7 @@ const getUserById = async ({ id }) => {
   return user;
 };
 
-const createUser = async (body) => {
-  const { displayName, email, password, image } = body;
+const createUser = async ({ displayName, email, password, image }) => {
   const user = await User.findOne({ where: { email } });
   if (user) return { message: 'User already registered' };
   const newUser = await User.create({ displayName, email, password, image });
