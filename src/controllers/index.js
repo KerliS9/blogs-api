@@ -1,7 +1,8 @@
 const express = require('express');
 const rescue = require('express-rescue');
 
-const { newUserValidation, newCategory } = require('../middleware/validations');
+const { newUserValidation, newCategory,
+  newPost, updatePost } = require('../middleware/validations');
 const { authenticationMiddleware } = require('../middleware/authMiddleware');
 
 const authRouter = express.Router();
@@ -12,6 +13,9 @@ const userController = require('./userController');
 
 const categoryRouter = express.Router();
 const categoryController = require('./categoryController');
+
+const postRouter = express.Router();
+const postController = require('./postController');
 
 authRouter.post('/', rescue(authController.userLogin));
 
@@ -25,4 +29,12 @@ categoryRouter.use(authenticationMiddleware);
 categoryRouter.get('/', rescue(categoryController.getAllCategories));
 categoryRouter.post('/', newCategory, rescue(categoryController.createCategory));
 
-module.exports = { authRouter, userRouter, categoryRouter };
+postRouter.use(authenticationMiddleware);
+postRouter.get('/search', rescue(postController.getPostByContent));
+postRouter.get('/:id', rescue(postController.getPostById));
+postRouter.get('/', rescue(postController.getAllPost));
+postRouter.post('/', newPost, rescue(postController.createPost));
+postRouter.put('/:id', updatePost, rescue(postController.updatePostById));
+postRouter.delete('/:id', rescue(postController.deletePostById));
+
+module.exports = { authRouter, userRouter, categoryRouter, postRouter };
