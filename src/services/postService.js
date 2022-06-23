@@ -3,15 +3,14 @@ const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
-const getAllPost = async () => {
-    const posts = await BlogPost.findAll({
+const getAllPost = async () => BlogPost.findAll({
       include: [
           { model: User, as: 'user', attributes: { exclude: ['password'] } },
           { model: Category, as: 'categories', through: { attributes: [] } },
       ],
   });
-    return posts;
-  };
+    // return posts;
+  // };
 
   const getPostById = async ({ id }) => {
     const blogPost = await BlogPost.findByPk(id);
@@ -53,24 +52,22 @@ const updatePostById = async (params, headers, body) => {
   const { dataValues } = await BlogPost.findByPk(id);
   if (dataValues.userId !== userId) return { message: 'Unauthorized user' };
   await BlogPost.update({ title, content }, { where: { id } });
-  // return getPostById(id);
-  return BlogPost.findOne({
+  return getPostById(id);
+  /* return BlogPost.findOne({
     where: { id },
     include: [
         { model: User, as: 'user', attributes: { exclude: ['password'] } },
         { model: Category, as: 'categories', through: { attributes: [] } },
     ],
-});
+}); */
 };
 
 const deletePostById = async (params, headers) => {
   const { id } = params;
   const { id: userId } = jwt.decode(headers.authorization);
   const post = await BlogPost.findByPk(id);
-  // console.log('service', post);
   if (!post) return { message: 'Post does not exist' };
   if (post.dataValues.userId !== userId) return { message: 'Unauthorized user' };
-  // return getPostById(id);
   BlogPost.destroy({ where: { id } });
 };
 
