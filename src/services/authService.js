@@ -1,7 +1,7 @@
 const { User } = require('../database/models');
 const { generateJWTToken } = require('../utils/generateTokenJWT');
 
-const authentication = async ({ email, password }) => {
+const userLogin = async ({ email, password }) => {
     if (!email || !password) {
         return { message: 'Some required fields are missing' };
     }
@@ -20,5 +20,5 @@ const authentication = async ({ email, password }) => {
 };
 
 module.exports = {
-    authentication,
+    userLogin,
 };
