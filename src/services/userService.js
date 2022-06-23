@@ -18,8 +18,8 @@ const getUserById = async ({ id }) => {
 const createUser = async ({ displayName, email, password, image }) => {
   const user = await User.findOne({ where: { email } });
   if (user) return { message: 'User already registered' };
-  const newUser = await User.create({ displayName, email, password, image });
-  const token = generateJWTToken(newUser.dataValues);
+  await User.create({ displayName, email, password, image });
+  const token = generateJWTToken({ displayName, email });
   return { token };
 };
 

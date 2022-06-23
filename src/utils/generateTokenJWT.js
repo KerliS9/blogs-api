@@ -8,16 +8,13 @@ const jwtConfig = {
     algorithm: 'HS256',
 };
 
-const generateJWTToken = (payload) => 
-    jwt.sign(payload, SECRET, jwtConfig);
+const generateJWTToken = (payload) => jwt.sign(payload, SECRET, jwtConfig);
 
 const authenticateToken = async (token) => {
     if (!token) {
         return false;
     }
-
-    const introspection = jwt.verify(token, SECRET, jwtConfig);
-    return introspection;
+    return jwt.verify(token, SECRET, jwtConfig);
 };
 
 module.exports = {

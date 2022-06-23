@@ -10,7 +10,7 @@ const authentication = async ({ email, password }) => {
         attributes: ['displayName', 'email', 'id', 'image'],
         where: { email, password },
     });
-
+    
     if (!user) {
         return { message: 'Invalid fields' };
     }

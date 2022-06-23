@@ -1,6 +1,10 @@
 const jwt = require('jsonwebtoken');
-
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
+const config = require('../database/config/config');
+
+const sequelize = new Sequelize(config.development);
+
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 
 const getAllPost = async () => BlogPost.findAll({
@@ -35,12 +39,15 @@ const createPost = async (body, headers) => {
   if (checkCategory.includes(false)) {
     return { message: '"categoryIds" not found' };
   }
-  const newPost = await BlogPost.create({ title, content, userId });
-  const postId = newPost.dataValues.id;
-  await Promise.all(categoryIds.map(async (categoryId) => {
-    await PostCategory.create({ postId, categoryId });
-  }));
-  return newPost;
+  const result = await sequelize.transaction(async (t) => {
+    const newPost = await BlogPost.create({ title, content, userId }, { transaction: t });
+    const postId = newPost.dataValues.id;
+    await Promise.all(categoryIds.map(async (categoryId) => {
+      await PostCategory.create({ postId, categoryId }, { transaction: t });
+    }));
+    return newPost;
+  });
+  return result.dataValues;
 };
 
 const updatePostById = async (params, headers, body) => {
@@ -51,13 +58,6 @@ const updatePostById = async (params, headers, body) => {
   if (dataValues.userId !== userId) return { message: 'Unauthorized user' };
   await BlogPost.update({ title, content }, { where: { id } });
   return getPostById(id);
-  /* return BlogPost.findOne({
-    where: { id },
-    include: [
-        { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        { model: Category, as: 'categories', through: { attributes: [] } },
-    ],
-}); */
 };
 
 const deletePostById = async (params, headers) => {
