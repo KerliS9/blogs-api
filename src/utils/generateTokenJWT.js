@@ -13,7 +13,6 @@ const generateJWTToken = (payload) =>
     jwt.sign(payload, SECRET, jwtConfig);
 
 const authenticateToken = async (token) => {
-    // console.log('authenticateToken params', token);
     if (!token) {
         return false;
     }

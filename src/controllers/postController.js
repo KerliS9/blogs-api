@@ -9,10 +9,8 @@ const postService = require('../services/postService');
 postRouter.use(authenticationMiddleware);
 
 postRouter.get('/search', async (req, res, next) => {
-  console.log('conectaria', req.query);
   try {
     const post = await postService.getPostByContent(req.query);
-    console.log('controller post', post);
     if (!post) {
       return res.status(statusCode.OK).json([]);
     }
@@ -24,7 +22,7 @@ postRouter.get('/search', async (req, res, next) => {
 
 postRouter.get('/:id', async (req, res, next) => {
   try {
-    const post = await postService.getPostById(req.params);
+    const post = await postService.getPostById(req.params.id);
     if (post.message) {
       return res.status(statusCode.NOT_FOUND).json(post);
     }

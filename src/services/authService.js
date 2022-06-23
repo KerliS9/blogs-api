@@ -16,7 +16,6 @@ const authentication = async ({ email, password }) => {
     }
 
     const token = generateJWTToken(user.dataValues);
-    // console.log('auth service', user);
     return { token };
 };
 

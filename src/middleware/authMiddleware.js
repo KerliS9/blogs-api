@@ -18,7 +18,6 @@ const authenticationMiddleware = async (req, _res, next) => {
         }
         next();
     } catch (e) {
-        // console.log('generateTokenJWT catch', e);
         return next({ statusCode: statusCode.UNAUTHORIZED, message: 'Expired or invalid token' });
     }    
 };
