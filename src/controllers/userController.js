@@ -34,13 +34,4 @@ userRouter.delete('/me', rescue(async (req, res) => {
     return res.status(statusCode.NO_CONTENT).send();
 }));
 
-/* userRouter.delete('/me', async (req, res, next) => {
-  try {
-    await userService.getMyUser(req.headers);
-    return res.status(statusCode.NO_CONTENT).send();
-  } catch (e) {
-    next(e);
-  }
-}); */
-
 module.exports = userRouter;

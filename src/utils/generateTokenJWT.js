@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-// const statusCode = require('./httpStatus');
 
-const SECRET = process.env.JWT_SECRET; // suaSenhaSecreta
+const SECRET = process.env.JWT_SECRET;
 
 const jwtConfig = {
     expiresIn: '15m',
@@ -18,7 +17,6 @@ const authenticateToken = async (token) => {
     }
 
     const introspection = jwt.verify(token, SECRET, jwtConfig);
-    // console.log('introspection', introspection);
     return introspection;
 };
 

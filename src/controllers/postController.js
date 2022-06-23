@@ -1,4 +1,5 @@
 const express = require('express');
+const rescue = require('express-rescue');
 const statusCode = require('../utils/httpStatus');
 const { newPost, updatePost } = require('../middleware/validations');
 const { authenticationMiddleware } = require('../middleware/authMiddleware');
@@ -8,67 +9,45 @@ const postService = require('../services/postService');
 
 postRouter.use(authenticationMiddleware);
 
-postRouter.get('/search', async (req, res, next) => {
-  try {
+postRouter.get('/search', rescue(async (req, res) => {
     const post = await postService.getPostByContent(req.query);
     if (!post) {
       return res.status(statusCode.OK).json([]);
     }
     return res.status(statusCode.OK).json(post);
-  } catch (e) {
-    next(e);
-  }
-});
+}));
 
-postRouter.get('/:id', async (req, res, next) => {
-  try {
+postRouter.get('/:id', rescue(async (req, res) => {
     const post = await postService.getPostById(req.params.id);
     if (post.message) {
       return res.status(statusCode.NOT_FOUND).json(post);
     }
     return res.status(statusCode.OK).json(post);
-  } catch (e) {
-    next(e);
-  }
-});
+}));
 
-postRouter.get('/', async (_req, res, next) => {
-  try {
+postRouter.get('/', rescue(async (_req, res) => {
     const posts = await postService.getAllPost();
     return res.status(statusCode.OK).json(posts);
-  } catch (e) {
-    next(e);
-  }
-}); 
+})); 
 
-postRouter.post('/', newPost, async (req, res, next) => {
-  try {
+postRouter.post('/', newPost, rescue(async (req, res) => {
     const post = await postService.createPost(req.body, req.headers);
     if (post.message) {
       return res.status(statusCode.BAD_REQUEST).json(post);
     }
     return res.status(statusCode.CREATED).json(post);
-  } catch (e) {
-    next(e);
-  }
-});
+}));
 
-postRouter.put('/:id', updatePost, async (req, res, next) => {
-  try {
+postRouter.put('/:id', updatePost, rescue(async (req, res) => {
     const post = await postService.updatePostById(req.params, req.headers, req.body);
     if (post.message) {
       return res.status(statusCode.UNAUTHORIZED).json(post);
     }
     return res.status(statusCode.OK).json(post);
-  } catch (e) {
-    next(e);
-  }
-});
+}));
 
-postRouter.delete('/:id', async (req, res, next) => {
-  try {
+postRouter.delete('/:id', rescue(async (req, res) => {
     const post = await postService.deletePostById(req.params, req.headers);
-    console.log('conectaria', post);
     if (post === undefined) {
       return res.status(statusCode.NO_CONTENT).send();
     }
@@ -76,9 +55,6 @@ postRouter.delete('/:id', async (req, res, next) => {
       return res.status(statusCode.UNAUTHORIZED).json(post);
     } 
     return res.status(statusCode.NOT_FOUND).json(post);
-  } catch (e) {
-    next(e);
-  }
-});
+}));
 
 module.exports = postRouter;
