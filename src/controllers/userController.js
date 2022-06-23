@@ -1,10 +1,4 @@
-// const express = require('express');
-// const rescue = require('express-rescue');
 const statusCode = require('../utils/httpStatus');
-// const { newUserValidation } = require('../middleware/validations');
-// const { authenticationMiddleware } = require('../middleware/authMiddleware');
-
-// const userRouter = express.Router();
 const userService = require('../services/userService');
 
 const createUser = async (req, res) => {
@@ -15,7 +9,6 @@ const createUser = async (req, res) => {
     return res.status(statusCode.CREATED).json(user);
 };
 
-// userRouter.use(authenticationMiddleware);
 const getUserById = async (req, res) => {
     const user = await userService.getUserById(req.params);
     if (user.message) {
@@ -34,5 +27,4 @@ const getMyUser = async (req, res) => {
     return res.status(statusCode.NO_CONTENT).send();
 };
 
-// module.exports = userRouter;
 module.exports = { createUser, getUserById, getAllUsers, getMyUser };
