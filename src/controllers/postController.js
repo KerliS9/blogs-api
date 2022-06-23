@@ -11,11 +11,11 @@ postRouter.use(authenticationMiddleware);
 postRouter.get('/search', async (req, res, next) => {
   console.log('conectaria', req.query);
   try {
-    const post = await postService.getPostByContent(req.params, req.query);
+    const post = await postService.getPostByContent(req.query);
     console.log('controller post', post);
-    /* if (post.message) {
-      return res.status(statusCode.NOT_FOUND).json(post);
-    } */
+    if (!post) {
+      return res.status(statusCode.OK).json([]);
+    }
     return res.status(statusCode.OK).json(post);
   } catch (e) {
     next(e);

@@ -7,7 +7,7 @@ const getAllPost = async () => {
     const posts = await BlogPost.findAll({
       include: [
           { model: User, as: 'user', attributes: { exclude: ['password'] } },
-          { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+          { model: Category, as: 'categories', through: { attributes: [] } },
       ],
   });
     return posts;
@@ -20,7 +20,7 @@ const getAllPost = async () => {
       where: { id },
       include: [
           { model: User, as: 'user', attributes: { exclude: ['password'] } },
-          { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+          { model: Category, as: 'categories', through: { attributes: [] } },
       ],
   });
   };
@@ -58,7 +58,7 @@ const updatePostById = async (params, headers, body) => {
     where: { id },
     include: [
         { model: User, as: 'user', attributes: { exclude: ['password'] } },
-        { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+        { model: Category, as: 'categories', through: { attributes: [] } },
     ],
 });
 };
@@ -74,22 +74,19 @@ const deletePostById = async (params, headers) => {
   BlogPost.destroy({ where: { id } });
 };
 
-const getPostByContent = async (params, query) => {
-  const { q } = query;
-  console.log('params', q);
-  const posts = await BlogPost.findAll({ where: { title: { [Op.substring]: q } } });
-    console.log('findAll', posts);
-  /* const posts = await BlogPost.findAll({ where: { [Op.or]: [
-    { title: { [Op.like]: q },
-    // { content: { [Op.substring]: q }
-  }],
+const getPostByContent = async ({ q }) => {
+  if (!q) return getAllPost();
+  const posts = await BlogPost.findAll({ where: { [Op.or]: [
+    { title: { [Op.substring]: q } },
+    { content: { [Op.substring]: q } },
+  ] },
   include: [
-      { model: User, as: 'user', attributes: { exclude: ['password'] } },
-      { model: Category, as: 'categories', attributes: { exclude: ['postCategory'] } },
+    { model: User, as: 'user', attributes: { exclude: ['password'] } },
+    { model: Category, as: 'categories', through: { attributes: [] } },
   ],
-} }); */
-  /* if (!posts) return { message: 'Post does not exist' };
- */
+});
+  if (posts.length === 0) return false;
+  return posts;
 };
 
 module.exports = {
