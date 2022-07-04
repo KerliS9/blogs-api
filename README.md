@@ -1,16 +1,35 @@
-# 🚧 README em construção 🚧
+## Projeto Blogs API
 
-<!-- Olá, Tryber!
+# Contexto
 
-Esse é apenas um arquivo inicial para o README do seu projeto.
+Neste projeto desenvolvi uma API e um banco de dados para a produção de conteúdo para um blog!
 
-É essencial que você preencha esse documento por conta própria, ok?
+A aplicação foi construída em Node.js e usando o pacote sequelize para fazer um CRUD de posts.
 
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
+Desenvolvi os endpoints que conectando-os ao banco de dados seguindo os princípios do REST;
 
-⚠️ IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
+Para fazer um post é necessário usuário e login, portanto será trabalhada a autenticação do usuário;
 
--->
+Criei a relação entre posts e categories e de categories para posts.
+
+# Tecnologias usadas
+
+Back end:
+- Node.js
+- Sequelize
+- Docker
+- MySQL
+- Princípios REST
+- Express
+- Joi
+- Rescue
+
+# Habilidades desenvolvidas
+
+- Como desenvolver um CRUD com Sequelize
+
+- Autenticar usuário
+
+- Gerar token via JWT e relacionar o token ao usuário
+
+* Projeto individual desenvolvido durante o curso de desenvolvimento Web na Trybe.
