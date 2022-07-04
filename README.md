@@ -32,4 +32,6 @@ Back end:
 
 - Gerar token via JWT e relacionar o token ao usuário
 
-* Projeto individual desenvolvido durante o curso de desenvolvimento Web na Trybe.
+# Observação
+
+- Projeto individual desenvolvido durante o curso de desenvolvimento Web na Trybe.
